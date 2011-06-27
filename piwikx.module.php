@@ -1,3 +1,4 @@
+<?php 
 /*
  * PiwikX simply integrates the <a href='http://www.piwik.org'>Piwik</a> statistic on your site.
  *
@@ -8,11 +9,14 @@
  * @version 0.6.6a <17.05.2010>
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ *
+ * @internal    @description: <strong>0.6.6a</strong> integrates the <a href='http://www.piwik.org'>Piwik</a> statistic on your site.
+ * @internal    @module code: include(MODX_BASE_PATH.'assets/modules/piwikx/piwikx.module.php');
  */
 
 if (!isset($modx))
     die();
-
+    
 $piwikURL = (isset($piwikURL)) ? $piwikURL : '';
 $piwikSiteId = (isset($piwikSiteId)) ? $piwikSiteId : 0;
 
@@ -25,6 +29,7 @@ $records = $modx->db->query($query);
 if ($modx->db->getRecordCount($records) > 0) {
     $record = $modx->db->getRow($records);
     $language = $record['setting_value'];
+    $language = ($record['setting_value'] != '') ? $record['setting_value'] : $language;
 }
 
 // load classfile
@@ -58,3 +63,4 @@ $PiwikX->piwikUserTrack = (isset($piwikUserTrack)) ? explode(',', $piwikUserTrac
 $PiwikX->piwikUserExclude = (isset($piwikUserExclude)) ? explode(',', $piwikUserExclude) : array();
 echo $PiwikX->displayModule();
 return;
+?>
