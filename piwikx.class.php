@@ -6,7 +6,7 @@
  * @subpackage class_file
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.6.6a <17.05.2010>
+ * @version 0.6.6b <31.06.2011>
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -156,7 +156,7 @@ class PiwikX {
      * @param $piwikTokenAuth Authentification token used by Piwik
      * @author Jako
      */
-    function __construct($piwikURL, $piwikSiteId, $piwikLanguage) {
+    function __construct($piwikURL, $piwikSiteId, $piwikLanguage = array()) {
         global $modx;
         
         if (!class_exists('CChunkie'))

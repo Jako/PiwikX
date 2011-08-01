@@ -6,7 +6,7 @@
  * @subpackage modx_module
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.6.6a <17.05.2010>
+ * @version 0.6.6b <31.06.2011>
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  *
@@ -14,8 +14,9 @@
  * @internal    @module code: include(MODX_BASE_PATH.'assets/modules/piwikx/piwikx.module.php');
  */
 
-if (!isset($modx))
-    die();
+if (IN_MANAGER_MODE != 'true') {
+    die('<h1>ERROR:</h1><p>Please use the MODx Content Manager instead of accessing this file directly.</p>');
+}
     
 $piwikURL = (isset($piwikURL)) ? $piwikURL : '';
 $piwikSiteId = (isset($piwikSiteId)) ? $piwikSiteId : 0;
