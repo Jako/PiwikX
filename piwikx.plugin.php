@@ -6,7 +6,7 @@
  * @subpackage modx_plugin
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.6.6b <31.06.2011>
+ * @version 0.6.6b <31.07.2011>
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  *
