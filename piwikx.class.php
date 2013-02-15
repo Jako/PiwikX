@@ -159,7 +159,7 @@ class PiwikX {
     function __construct($piwikURL, $piwikSiteId, $piwikLanguage = array()) {
         global $modx;
         
-        if (!class_exists('CChunkie'))
+        if (!class_exists('evoChunkie'))
             include_once MODX_BASE_PATH.'assets/modules/piwikx/includes/chunkie.class.inc.php';
         
         if (substr($piwikURL, 0, 7) == "http://") {
@@ -199,7 +199,7 @@ class PiwikX {
         
         $actionName = $modx->getTemplateVarOutput($this->piwikActionName);
         if ($actionName[$this->piwikActionName]) {
-            $actionName = new CChunkie($actionName[$this->piwikActionName]);
+            $actionName = new evoChunkie($actionName[$this->piwikActionName]);
             $actionName = $actionName->Render();
         } else {
             $actionName = $modx->getTemplateVarOutput('pagetitle');
@@ -239,7 +239,7 @@ class PiwikX {
                 $theme = $modx->db->select('setting_value', $modx->getFullTableName('system_settings'), 'setting_name=\'manager_theme\'', '');
                 $theme = $modx->db->getRow($theme);
                 $theme = ($theme['setting_value'] != '') ? '/'.$theme['setting_value'] : '';
-                $tpl = new CChunkie($piwikModuleTemplate);
+                $tpl = new evoChunkie($piwikModuleTemplate);
                 $tpl->AddVar('LangModuleName', $this->piwikLanguage['modulename']);
                 $tpl->AddVar('LangModuleDesc', $this->piwikLanguage['moduledesc']);
                 $tpl->AddVar('LangModuleReload', $this->piwikLanguage['modulereload']);
@@ -251,7 +251,7 @@ class PiwikX {
                 $tpl->AddVar('ManagerTheme', $theme);
                 $widgets = '';
                 foreach ($piwikWidgets as $piwikWidget) {
-                    $widget = new CChunkie($piwikWidgetTemplate);
+                    $widget = new evoChunkie($piwikWidgetTemplate);
                     $widget->CreateVars($piwikWidget);
                     $widget->AddVar('piwikURL', 'http://'.$this->piwikURL);
                     $widget->AddVar('piwikSiteId', $this->piwikSiteId);
@@ -267,7 +267,7 @@ class PiwikX {
             $theme = $modx->db->select('setting_value', $modx->getFullTableName('system_settings'), 'setting_name=\'manager_theme\'', '');
             $theme = $modx->db->getRow($theme);
             $theme = ($theme['setting_value'] != '') ? '/'.$theme['setting_value'] : '';
-            $tpl = new CChunkie($piwikNoConfigTemplate);
+            $tpl = new evoChunkie($piwikNoConfigTemplate);
             $tpl->AddVar('LangModuleName', $this->piwikLanguage['modulename']);
             $tpl->AddVar('LangModuleNoConfigName', $this->piwikLanguage['modulenoconfigname']);
             $tpl->AddVar('LangModuleDesc', $this->piwikLanguage['moduledesc']);
