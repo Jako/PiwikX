@@ -48,7 +48,7 @@ If you want to insert the Piwik Tracking code on each page you should activate t
 Widget configuration
 --------------------------------------------------------------------------------
 
-The PiwikX Module displays a few default widgets in the MODX Backend. You could change these widgets in the file **lang/[language].managerwidgets.php**. [language] is the language of the MODX backend (defaults to english).
+The PiwikX Module displays a few default widgets in the MODX Backend. You could change these widgets in the file **lang/&lt;language&gt;.managerwidgets.php**. &lt;language&gt; is the language of the MODX backend (defaults to english).
 
 You could get the informations for *moduleToWidgetize* and *actionToWidgetize* easily if you log into the Piwik backend and create a new Widget (Menu -> Widgets). In the generated iframe code the two values could be found. The following example shows a widget for the 'Length of visits in the last month':
 
