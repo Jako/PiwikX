@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="media/style[+ManagerTheme+]/style.css" />
+		<title>[+LangModuleName+]</title>
+		<style type="text/css">
+			.widget { background: #fff; margin: 0 10px 10px 0 !important; margin-bottom: 0; border: 1px solid #ccc; padding: 5px; width: auto }
+			.widgetleft { margin: 0 10px 10px 0 !important; margin-bottom: 0; border: 1px solid #ccc; padding: 5px; width: auto }
+			.widgetright { margin: 0 0 10px 0 !important; margin-bottom: 0; border: 1px solid #ccc; padding: 5px; width: auto }
+			.widgetouterleft { width: 50%; float: left}
+			.widgetouterright { width: 50%; float: right }
+			.widgettitle { padding-left: 5px }
+			.sectionBody { padding-bottom: 0 }
+		</style>
+		<script type="text/javascript">function postForm(opcode) {
+				document.module.opcode.value = opcode;
+				document.module.submit();
+			}
+		</script>
+	</head>
+	<body>
+		<h1>[+LangModuleName+]</h1>
+		<div id="actions">
+			<ul class="actionButtons">
+				<li id="Button1">
+					<a href="#" onclick="window.location.reload();
+							return false;"><img src="media/style[+ManagerTheme+]/images/icons/refresh.png" alt="" /> [+LangModuleReload+]</a>
+				</li>
+				<li id="Button2">
+					<a href="[+piwikURL+]/index.php" target="_new"><img src="media/style[+ManagerTheme+]/images/icons/layout_go.png" alt="" /> [+LangModuleShowFullStat+]</a>
+				</li>
+				<li id="Button3">
+					<a href="#" onclick="document.location.href = 'index.php?a=106';"><img src="media/style[+ManagerTheme+]/images/icons/stop.png" alt="" /> [+LangModuleClose+]</a>
+				</li>
+			</ul>
+		</div>
+		<div class="sectionHeader">[+LangModuleDesc+]</div>
+		<div class="sectionBody">
+			[+piwikManagerWidgets+]
+			<div style="clear: both"></div>
+		</div>
+	</body>
+</html>

@@ -1,17 +1,17 @@
 <?php
 /*
- * PiwikX simply integrates the <a href='http://www.piwik.org'>Piwik</a> statistic on your site.
+ * Integrate <a href='http://www.piwik.org'>Piwik</a> statistics into your site
  *
  * @package PiwikX
  * @subpackage german_language
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.6.6b <31.07.2011>
+ * @version 0.7
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-$piwikx_lang = array ( );
+$piwikx_lang = array();
 
 //PiwikX language strings.
 $piwikx_lang ['languagefile'] = 'german';

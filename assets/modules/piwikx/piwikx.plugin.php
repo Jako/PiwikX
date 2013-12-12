@@ -1,16 +1,16 @@
 <?php
 /*
- * PiwikX simply integrates the <a href='http://www.piwik.org'>Piwik</a> statistic on your site.
+ * Integrate <a href='http://www.piwik.org'>Piwik</a> statistics into your site
  *
  * @package PiwikX
  * @subpackage modx_plugin
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.6.6b <31.07.2011>
+ * @version 0.7
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  *
- * @internal    @description: <strong>0.6.6a</strong> integrates the <a href='http://www.piwik.org'>Piwik</a> statistic on your site.
+ * @internal    @description: <strong>0.7</strong> Integrate <a href='http://www.piwik.org'>Piwik</a> statistics into your site
  * @internal    @plugin code: include(MODX_BASE_PATH.'assets/modules/piwikx/piwikx.plugin.php');
  * @internal    @MODx event: OnLoadWebDocument
  */
