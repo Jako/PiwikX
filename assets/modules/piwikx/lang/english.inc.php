@@ -6,7 +6,7 @@
  * @subpackage english_language
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.7
+ * @version 0.7.1
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -35,7 +35,7 @@ $piwikx_lang ['modulenoconfigtext'] = <<<HTML
 &piwikSiteId=Piwik Site ID;text;1
 &piwikUsername=Username to display the Piwik widgets;text;
 &piwikPassword=md5 encrypted password to display the Piwik widgets;text;
-&piwikTokenAuth=authentification token (not used);text;
+&piwikTokenAuth=authentification token;text;
 &piwikActionName=TV containing the tracking title;text;
 &piwikJsName=Name of Javascript;text;piwik.js
 &piwikDownloadExtensions=List of files extensions to track as downloads (comma separated);text;

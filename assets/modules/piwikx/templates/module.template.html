@@ -1,10 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="media/style[+ManagerTheme+]/style.css" />
-		<title>[+LangModuleName+]</title>
+		<link rel="stylesheet" type="text/css" href="media/style[+managertheme+]/style.css" />
+		<title>[+language.modulename+]</title>
 		<style type="text/css">
 			.widget { background: #fff; margin: 0 10px 10px 0 !important; margin-bottom: 0; border: 1px solid #ccc; padding: 5px; width: auto }
 			.widgetleft { margin: 0 10px 10px 0 !important; margin-bottom: 0; border: 1px solid #ccc; padding: 5px; width: auto }
@@ -21,24 +20,23 @@
 		</script>
 	</head>
 	<body>
-		<h1>[+LangModuleName+]</h1>
+		<h1>[+language.modulename+]</h1>
 		<div id="actions">
 			<ul class="actionButtons">
 				<li id="Button1">
-					<a href="#" onclick="window.location.reload();
-							return false;"><img src="media/style[+ManagerTheme+]/images/icons/refresh.png" alt="" /> [+LangModuleReload+]</a>
+					<a href="#" onclick="window.location.reload();"><img src="media/style[+managertheme+]/images/icons/refresh.png" alt="[+language.modulereload+]" /> [+language.modulereload+]</a>
 				</li>
 				<li id="Button2">
-					<a href="[+piwikURL+]/index.php" target="_new"><img src="media/style[+ManagerTheme+]/images/icons/layout_go.png" alt="" /> [+LangModuleShowFullStat+]</a>
+					<a href="[+piwikURL+]/index.php" target="_new"><img src="media/style[+managertheme+]/images/icons/layout_go.png" alt="[+language.moduleshowfullstat+]" /> [+language.moduleshowfullstat+]</a>
 				</li>
 				<li id="Button3">
-					<a href="#" onclick="document.location.href = 'index.php?a=106';"><img src="media/style[+ManagerTheme+]/images/icons/stop.png" alt="" /> [+LangModuleClose+]</a>
+					<a href="#" onclick="document.location.href='index.php?a=106';"><img src="media/style[+managertheme+]/images/icons/stop.png" alt="[+language.moduleclose+]" /> [+language.moduleclose+]</a>
 				</li>
 			</ul>
 		</div>
-		<div class="sectionHeader">[+LangModuleDesc+]</div>
+		<div class="sectionHeader">[+language.moduledesc+]</div>
 		<div class="sectionBody">
-			[+piwikManagerWidgets+]
+			[+widgets+]
 			<div style="clear: both"></div>
 		</div>
 	</body>

@@ -6,7 +6,7 @@
  * @subpackage english_managerwidgets
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.7
+ * @version 0.7.1
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -21,7 +21,7 @@ $piwikWidgets['LastVisitsGraph'] = array(
 	'moduleToWidgetize' => 'VisitsSummary',
 	'actionToWidgetize' => 'getEvolutionGraph',
 	'period'            => 'day',
-	'date'              => 'today'
+	'date'              => 'yesterday'
 );
 $piwikWidgets['Actions'] = array(
 	'position'          => 'right',
@@ -33,7 +33,7 @@ $piwikWidgets['Actions'] = array(
 	'moduleToWidgetize' => 'Actions',
 	'actionToWidgetize' => 'getPageTitles',
 	'period'            => 'month',
-	'date'              => 'today'
+	'date'              => 'yesterday'
 );
 $piwikWidgets['Sparklines'] = array(
 	'position'          => 'left',
@@ -45,7 +45,7 @@ $piwikWidgets['Sparklines'] = array(
 	'moduleToWidgetize' => 'VisitsSummary',
 	'actionToWidgetize' => 'getSparklines',
 	'period'            => 'day',
-	'date'              => 'today'
+	'date'              => 'yesterday'
 );
 $piwikWidgets['Keywords'] = array(
 	'position'          => 'right',
@@ -57,6 +57,6 @@ $piwikWidgets['Keywords'] = array(
 	'moduleToWidgetize' => 'Referers',
 	'actionToWidgetize' => 'getKeywords',
 	'period'            => 'month',
-	'date'              => 'today'
+	'date'              => 'yesterday'
 );
 ?>

@@ -6,7 +6,7 @@
  * @subpackage german_language
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.7
+ * @version 0.7.1
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -35,7 +35,7 @@ $piwikx_lang ['modulenoconfigtext'] = <<<HTML
 &piwikSiteId=Piwik Site ID;text;1
 &piwikUsername=Username für Piwik Widgets;text;
 &piwikPassword=md5-verschlüsseltes Passwort für Piwik Widgets;text;
-&piwikTokenAuth=Authentifizierungs Token (ungenutzt);text;
+&piwikTokenAuth=Authentifizierungs Token;text;
 &piwikActionName=Template- oder Dokumentvariable mit dem Tracking-Titel;text;
 &piwikJsName=Name des Javascript;text;
 &piwikDownloadExtensions=Liste der Dateiendungen welche als Download angesehen werden (kommaseparierte Liste);text;

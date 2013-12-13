@@ -6,7 +6,7 @@
  * @subpackage class_file
  * @link http://www.partout.info/piwik_modx.html
  *
- * @version 0.7
+ * @version 0.7.1
  * @author Thomas Jakobi <thomas.jakobi@partout.info>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -14,132 +14,30 @@
 class PiwikX {
 
 	/**
-	 * URL of the Piwik installation.
-	 *
-	 * @var string
-	 * @access public
+	 * A reference to the modX instance
+	 * @var modX $modx
 	 */
-	var $piwikURL;
+	public $modx;
 
 	/**
-	 * Id of the website in Piwik.
-	 *
-	 * @var string
-	 * @access public
+	 * A reference to the newChunkie instance
+	 * @var newChunkie $chunkie
 	 */
-	var $piwikSiteId;
+	public $chunkie;
 
 	/**
-	 * Authentification token used by Piwik.
-	 *
-	 * @var string
-	 * @access public
+	 * Global options.
+	 * @var array $options
+	 * @access private
 	 */
-	var $piwikTokenAuth;
+	private $options;
 
 	/**
-	 * Username for viewing Piwik widgets.
-	 *
-	 * @var string
-	 * @access public
+	 * Global language.
+	 * @var array $language
+	 * @access private
 	 */
-	var $piwikUsername;
-
-	/**
-	 * md5 encrypted Password for viewing Piwik widgets.
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikPassword;
-
-	/**
-	 * An array of language specific phrases.
-	 *
-	 * @var array
-	 * @access public
-	 */
-	var $piwikLanguage;
-
-	/**
-	 * Filename of the javascript.
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikJsName;
-
-	/**
-	 * Template variable containing the tracking title (could contain snippets and chunks).
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikActionName;
-
-	/**
-	 * List of files extensions to track as downloads.
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikDownloadExtensions;
-
-	/**
-	 * Consider a host an alias host.
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikHostsAlias;
-
-	/**
-	 * Pause timer for outlinks and downloads.
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikTrackerPause;
-
-	/**
-	 * Disable download and outlink tracking.
-	 *
-	 * @var string
-	 * @access public
-	 */
-	var $piwikInstallTracker;
-
-	/**
-	 * Users to track (not implemented now).
-	 *
-	 * @var array
-	 * @access public
-	 */
-	var $piwikUserTrack;
-
-	/**
-	 * Users not to track.
-	 *
-	 * @var array
-	 * @access public
-	 */
-	var $piwikUserExclude;
-
-	/**
-	 * Webgroups to track (not implemented now).
-	 *
-	 * @var array
-	 * @access public
-	 */
-	var $piwikGroupTrack;
-
-	/**
-	 * Webgroups to track.
-	 *
-	 * @var array
-	 * @access public
-	 */
-	var $piwikGroupExclude;
+	private $language;
 
 	/**
 	 * manager theme.
@@ -152,24 +50,18 @@ class PiwikX {
 	/**
 	 * PiwikX Class Constructor
 	 *
-	 * @param $piwikURL URL of the Piwik installation
-	 * @param $piwikTokenAuth Authentification token used by Piwik
-	 * @author Jako
+	 * @param modX &$modx A reference to the modX instance.
+	 * @param array $config An array of configuration options.
 	 */
-	function __construct($piwikURL, $piwikSiteId, $piwikLanguage = array()) {
-		global $modx;
+	function __construct($modx, $config = array()) {
+		$this->modx = &$modx;
+		$this->options = $config;
 
-		if (!class_exists('evoChunkie'))
-			include_once MODX_BASE_PATH . 'assets/modules/piwikx/includes/chunkie.class.inc.php';
-
-		if (substr($piwikURL, 0, 7) == "http://") {
-			$piwikURL = substr($piwikURL, 7);
-		} elseif (substr($piwikURL, 0, 8) == "https://") {
-			$piwikURL = substr($piwikURL, 8);
+		if (!class_exists('newChunkie')) {
+			include_once PWK_BASE_PATH . 'includes/newchunkie.class.inc.php';
 		}
-		$this->piwikURL = (isset($piwikURL)) ? $piwikURL : '';
-		$this->piwikSiteId = (isset($piwikSiteId)) ? $piwikSiteId : 0;
-		$this->piwikLanguage = $piwikLanguage;
+		$this->language = $config['piwikLang'];
+		$this->chunkie = new newChunkie($this->modx, array('basepath' => PWK_PATH));
 	}
 
 	/**
@@ -177,7 +69,7 @@ class PiwikX {
 	 * @return boolean
 	 */
 	function configIsSet() {
-		return (($this->piwikURL != '') && ($this->piwikSiteId != 0) && ($this->piwikUsername != '') && ($this->piwikPassword != ''));
+		return (($this->options['piwikURL'] != '') && ($this->options['piwikSiteId'] != 0) && ($this->options['piwikUsername'] != '') && ($this->options['piwikPassword'] != ''));
 	}
 
 	/**
@@ -195,14 +87,12 @@ class PiwikX {
 	 * @return string
 	 */
 	function actionName() {
-		global $modx;
-
-		$actionName = $modx->getTemplateVarOutput($this->piwikActionName);
-		if ($actionName[$this->piwikActionName]) {
-			$actionName = new evoChunkie($actionName[$this->piwikActionName]);
+		$actionName = $this->modx->getTemplateVarOutput($this->options['piwikActionName']);
+		if ($actionName[$this->options['piwikActionName']]) {
+			$actionName = new evoChunkie($actionName[$this->options['piwikActionName']]);
 			$actionName = $actionName->Render();
 		} else {
-			$actionName = $modx->getTemplateVarOutput('pagetitle');
+			$actionName = $this->modx->getTemplateVarOutput('pagetitle');
 			$actionName = $actionName['pagetitle'];
 		}
 		$actionName = str_replace('/', '_', $actionName);
@@ -214,49 +104,45 @@ class PiwikX {
 	 * @return string
 	 */
 	function displayModule() {
-		global $modx;
-		include 'lang/' . $this->piwikLanguage['languagefile'] . '.managerwidgets.php';
+		include 'lang/' . $this->language['languagefile'] . '.managerwidgets.php';
 
 		if ($this->configIsSet()) {
-			if ($_GET['piwikx'] == "in") {
-				$theme = $modx->db->select('setting_value', $modx->getFullTableName('system_settings'), 'setting_name=\'manager_theme\'', '');
-				$theme = $modx->db->getRow($theme);
-				$theme = ($theme['setting_value'] != '') ? '/' . $theme['setting_value'] : '';
-				$tpl = new evoChunkie('@FILE assets/modules/piwikx/templates/module.template.html');
-				$tpl->AddVar('LangModuleName', $this->piwikLanguage['modulename']);
-				$tpl->AddVar('LangModuleDesc', $this->piwikLanguage['moduledesc']);
-				$tpl->AddVar('LangModuleReload', $this->piwikLanguage['modulereload']);
-				$tpl->AddVar('LangModuleClose', $this->piwikLanguage['moduleclose']);
-				$tpl->AddVar('LangModuleShowFullStat', $this->piwikLanguage['moduleshowfullstat']);
-				$tpl->AddVar('piwikURL', 'http://' . $this->piwikURL);
-				$tpl->AddVar('piwikSiteId', $this->piwikSiteId);
-				$tpl->AddVar('piwikTokenAuth', $this->piwikTokenAuth);
-				$tpl->AddVar('ManagerTheme', $theme);
-				$widgets = '';
-				foreach ($piwikWidgets as $piwikWidget) {
-					$widget = new evoChunkie('@FILE assets/modules/piwikx/templates/widget.template.html');
-					$widget->CreateVars($piwikWidget);
-					$widget->AddVar('piwikURL', 'http://' . $this->piwikURL);
-					$widget->AddVar('piwikSiteId', $this->piwikSiteId);
-					$widgets .= $widget->Render();
-				}
-				$tpl->AddVar('piwikManagerWidgets', $widgets);
-				$template = $tpl->Render();
-			} else {
-				header('Location: http://' . $this->piwikURL . '/index.php?module=Login&action=logme&login=' . $this->piwikUsername . '&password=' . $this->piwikPassword . '&url=' . urlencode($modx->config['site_url'] . '/manager/index.php?a=' . intval($_GET['a']) . '&id=' . intval($_GET['id']) . '&piwikx=in'));
-			}
-		} else {
-			$theme = $modx->db->select('setting_value', $modx->getFullTableName('system_settings'), 'setting_name=\'manager_theme\'', '');
-			$theme = $modx->db->getRow($theme);
+			$theme = $this->modx->db->select('setting_value', $this->modx->getFullTableName('system_settings'), 'setting_name=\'manager_theme\'', '');
+			$theme = $this->modx->db->getRow($theme);
 			$theme = ($theme['setting_value'] != '') ? '/' . $theme['setting_value'] : '';
-			$tpl = new evoChunkie('@FILE assets/modules/piwikx/templates/noconfig.template.html');
-			$tpl->AddVar('LangModuleName', $this->piwikLanguage['modulename']);
-			$tpl->AddVar('LangModuleNoConfigName', $this->piwikLanguage['modulenoconfigname']);
-			$tpl->AddVar('LangModuleDesc', $this->piwikLanguage['moduledesc']);
-			$tpl->AddVar('LangModuleClose', $this->piwikLanguage['moduleclose']);
-			$tpl->AddVar('LangModuleNoConfigText', $this->piwikLanguage['modulenoconfigtext']);
-			$tpl->AddVar('ManagerTheme', $theme);
-			$template = $tpl->Render();
+
+			$widgets = array();
+			foreach ($piwikWidgets as $piwikWidget) {
+				$this->chunkie->setPlaceholder('', $piwikWidget, 'widget');
+				$this->chunkie->setPlaceholder('piwikURL', 'http://' . $this->options['piwikURL'], 'widget');
+				$this->chunkie->setPlaceholder('piwikSiteId', $this->options['piwikSiteId'], 'widget');
+				$this->chunkie->setPlaceholder('piwikTokenAuth', $this->options['piwikTokenAuth'], 'widget');
+				$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/widget.template.html'));
+				$this->chunkie->prepareTemplate('', array(), 'widget');
+				$widgets[] = $this->chunkie->process('widget');
+			}
+
+			$this->chunkie->setPlaceholder('widgets', implode("\n", $widgets), 'module');
+			$this->chunkie->setPlaceholder('language', $this->language, 'module');
+			$this->chunkie->setPlaceholder('piwikURL', 'http://' . $this->options['piwikURL'], 'module');
+			$this->chunkie->setPlaceholder('piwikSiteId', $this->options['piwikSiteId'], 'module');
+			$this->chunkie->setPlaceholder('piwikTokenAuth', $this->options['piwikTokenAuth'], 'module');
+			$this->chunkie->setPlaceholder('managertheme', $theme, 'module');
+			$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/module.template.html'));
+			$this->chunkie->prepareTemplate('', array(), 'module');
+
+			$template = $this->chunkie->process('module');
+		} else {
+			$theme = $this->modx->db->select('setting_value', $this->modx->getFullTableName('system_settings'), 'setting_name=\'manager_theme\'', '');
+			$theme = $this->modx->db->getRow($theme);
+			$theme = ($theme['setting_value'] != '') ? '/' . $theme['setting_value'] : '';
+
+			$this->chunkie->setPlaceholder('language', $this->language, 'module');
+			$this->chunkie->setPlaceholder('managertheme', $theme, 'module');
+			$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/noconfig.template.html'));
+			$this->chunkie->prepareTemplate('', array(), 'module');
+
+			$template = $this->chunkie->process('module');
 		}
 		return $template;
 	}
@@ -265,44 +151,44 @@ class PiwikX {
 	 * Includes the parsed chunk for the html-code
 	 */
 	function includeChunk() {
-		global $modx;
-
-		if ($this->configIsSet() && ($modx->documentObject[contentType] == 'text/html')) {
+		if ($this->configIsSet() && ($this->modx->documentObject['contentType'] == 'text/html')) {
 			$username = $this->loggedUserName();
 
 			// Check Webgroup
-			if ($modx->isMemberOfWebGroup($this->piwikGroupTrack))
+			if ($this->modx->isMemberOfWebGroup($this->options['piwikGroupTrack']))
 				$trackUserName = $username;
-			if ($modx->isMemberOfWebGroup($this->piwikGroupExclude))
+			if ($this->modx->isMemberOfWebGroup($this->options['piwikGroupExclude']))
 				return '';
 
 			// Check User
-			if (in_array($username, $this->piwikUserTrack))
+			if (in_array($username, $this->options['piwikUserTrack']))
 				$trackUserName = $username;
-			if (in_array($username, $this->piwikUserExclude))
+			if (in_array($username, $this->options['piwikUserExclude']))
 				return '';
 
 			// generate Chunk for the body
-			$tpl = new evoChunkie('@FILE assets/modules/piwikx/templates/chunk.template.html');
-			$template = $piwikChunkTemplate;
+			$params = array();
+			if ($this->options['piwikTrackerPause'] != '')
+				$params[] = '_paq.push([ "setLinkTrackingTimer", ' . $this->options['piwikTrackerPause'] . ' ]);';
+			if (!empty($this->options['piwikHostsAlias']))
+				$params[] = '_paq.push([ "setDomains", ["' . implode(', ', $this->options['piwikHostsAlias']) . '"] ]);';
+			if (!empty($this->options['piwikDownloadExtensions']))
+				$params[] = '_paq.push([ "setDownloadExtensions", "' . implode('|', $this->options['piwikDownloadExtensions']) . '" ]);';
+			if ($this->options['piwikInstallTracker'] == '')
+				$params[] = '_paq.push(["enableLinkTracking"]);';
 
-			if ($this->piwikTrackerPause != '')
-				$params = 'piwikTracker.setLinkTrackingTimer(' . $this->piwikTrackerPause . ');' . "\r\n";
-			if ($this->piwikHostsAlias != '')
-				$params .= 'piwikTracker.setDomains(["' . explode('", "', $this->piwikHostsAlias) . '"]);' . "\r\n";
-			if ($this->piwikDownloadExtensions != '')
-				$params = 'piwikTracker.setDownloadExtensions( "' . explode('|', $this->piwikDownloadExtensions) . '" );' . "\r\n";
-			if ($this->piwikInstallTracker == '')
-				$params .= 'piwikTracker.enableLinkTracking();' . "\r\n";
+			$this->chunkie->setPlaceholder('piwikURL', $this->options['piwikURL']);
+			$this->chunkie->setPlaceholder('piwikSiteId', $this->options['piwikSiteId']);
+			$this->chunkie->setPlaceholder('piwikJsName', $this->options['piwikJsName']);
+			$this->chunkie->setPlaceholder('piwikDocumentTitle', $this->actionName());
+			$this->chunkie->setPlaceholder('piwikParams', implode("\r\n", $params));
+			$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/chunk.template.html'));
+			$this->chunkie->prepareTemplate('');
 
-			$tpl->AddVar('piwikURL', $this->piwikURL);
-			$tpl->AddVar('piwikSiteID', $this->piwikSiteId);
-			$tpl->AddVar('piwikJsName', $this->piwikJsName);
-			$tpl->AddVar('piwikDocumentTitle', $this->actionName());
-			$tpl->AddVar('piwikParams', $params);
-
-			$template = $tpl->Render();
+			$template = $this->chunkie->process();
 			return $template;
+		} else {
+			return 'nix';
 		}
 		return;
 	}
