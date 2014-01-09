@@ -183,7 +183,7 @@ class PiwikX {
 			$this->chunkie->setPlaceholder('piwikDocumentTitle', $this->actionName());
 			$this->chunkie->setPlaceholder('piwikParams', implode("\r\n", $params));
 			$this->chunkie->setTpl($this->chunkie->getTemplateChunk('@FILE templates/chunk.template.html'));
-			$this->chunkie->prepareTemplate('');
+			$this->chunkie->prepareTemplate();
 
 			$template = $this->chunkie->process();
 			return $template;

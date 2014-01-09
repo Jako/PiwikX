@@ -115,8 +115,8 @@ class newChunkie {
 	 * @param DocumentParser $modx The DocumentParser instance.
 	 * @param array $config An array of configuration options. Optional.
 	 */
-	function __construct($modx, $config = array()) {
-		$this->modx = & $modx;
+	function __construct(&$modx, $config = array()) {
+		$this->modx = &$modx;
 
 		if (!class_exists("PHxParser")) {
 			include_once(strtr(realpath(dirname(__FILE__)) . "/phx.parser.class.inc.php", '\\', '/'));
@@ -329,7 +329,7 @@ class newChunkie {
 	 * @param string $key The key to prepend to the placeholder names.
 	 * @param string $queue The queue name.
 	 */
-	public function prepareTemplate($key, array $placeholders = array(), $queue = '') {
+	public function prepareTemplate($key = '', array $placeholders = array(), $queue = '') {
 		$queue = !empty($queue) ? $queue : $this->queue;
 		if ($this->options['profile']) {
 			$this->profile[$queue]['prepare'] = isset($this->profile[$queue]['prepare']) ? $this->profile[$queue]['prepare'] : 0;
@@ -341,7 +341,7 @@ class newChunkie {
 		if (!isset($this->templates[$queue])) {
 			$this->templates[$queue] = new stdClass();
 			$this->templates[$queue]->templates = array();
-			$this->templates[$queue]->wrapper = (!empty($this->tplWrapper)) ? $this->tplWrapper : '[[+wrapper]]';
+			$this->templates[$queue]->wrapper = (!empty($this->tplWrapper)) ? $this->tplWrapper : '[+wrapper+]';
 		}
 		$current = &$this->templates[$queue];
 
@@ -352,8 +352,8 @@ class newChunkie {
 			if (!isset($current->templates[$currentkey])) {
 				$current->templates[$currentkey] = new stdClass();
 				$current->templates[$currentkey]->templates = array();
-				$current->templates[$currentkey]->wrapper = (!empty($this->tplWrapper)) ? $this->tplWrapper : '[[+wrapper]]';
-				$current->templates[$currentkey]->template = '[[+' . trim($currentkeypath, '.') . ']]';
+				$current->templates[$currentkey]->wrapper = (!empty($this->tplWrapper)) ? $this->tplWrapper : '[+wrapper+]';
+				$current->templates[$currentkey]->template = '[+' . trim($currentkeypath, '.') . '+]';
 			}
 			$current = &$current->templates[$currentkey];
 		}
@@ -365,20 +365,20 @@ class newChunkie {
 				$placeholders = $this->getPlaceholders($queue);
 				foreach ($placeholders as $k => $v) {
 					$k = str_replace($key . '.', '', $k);
-					$current->template = str_replace('[[+' . $k . ']]', $v, $current->template);
+					$current->template = str_replace('[+' . $k . '+]', $v, $current->template);
 				}
 			} else {
 				foreach ($placeholders as $k => $v) {
-					$current->template = str_replace('[[+' . $k . ']]', $v, $current->template);
+					$current->template = str_replace('[+' . $k . '+]', $v, $current->template);
 				}
 			}
 			// Replace remaining placeholders with key based placeholders
-			$current->template = str_replace('[[+', '[[+' . $key . '.', $current->template);
+			$current->template = str_replace('[+', '[+' . $key . '.', $current->template);
 		} else {
 			$current->template = '';
 		}
 		if (!$current->wrapper) {
-			$current->wrapper = (!empty($this->tplWrapper)) ? $this->tplWrapper : '[[+wrapper]]';
+			$current->wrapper = (!empty($this->tplWrapper)) ? $this->tplWrapper : '[+wrapper+]';
 		}
 		unset($current);
 		if ($this->options['profile']) {
@@ -417,13 +417,13 @@ class newChunkie {
 				$flat = array_merge($flat, $this->templatesJoinRecursive($value, $prefix . $key . '.', $outputSeparator));
 			}
 			if ($prefix) {
-				$return = array(trim($prefix, '.') => str_replace('[[+wrapper]]', str_replace('[[+' . trim($prefix, '.') . ']]', implode($outputSeparator, $flat), $object->template), $object->wrapper));
+				$return = array(trim($prefix, '.') => str_replace('[+wrapper+]', str_replace('[+' . trim($prefix, '.') . '+]', implode($outputSeparator, $flat), $object->template), $object->wrapper));
 				foreach ($flat as $key => $value) {
-					$return = str_replace('[[+' . $key . ']]', $value, $return);
+					$return = str_replace('[+' . $key . '+]', $value, $return);
 				}
 			}
 		} else {
-			$return = array(trim($prefix, '.') => str_replace('[[+wrapper]]', $object->template, $object->wrapper));
+			$return = array(trim($prefix, '.') => str_replace('[+wrapper+]', $object->template, $object->wrapper));
 		}
 		return $return;
 	}
