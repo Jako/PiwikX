@@ -10,7 +10,7 @@
  * @internal  @properties
  * @internal  @events OnLoadWebDocument
  * @internal  @modx_category Statistics
- * @author    Jako (thomas.jakobi@partout.info)
+ * @author    Jako
  */
 
 include(MODX_BASE_PATH.'assets/modules/piwikx/piwikx.plugin.php');
